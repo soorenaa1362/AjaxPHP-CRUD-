@@ -41,7 +41,7 @@
 
                             <br>
                             <label for="password">Password</label>
-                            <input type="text" class="form-control" name="password" id="password">
+                            <input type="password" class="form-control" name="password" id="password">
                             <span id="alert-password" class="text-danger"></span>
                         </form>
                     </div>
@@ -51,7 +51,21 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> <!-- Modal -->
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php include 'fetch.php'; ?>                
+            </tbody>
+        </table>
 
     </div>
 </body>
