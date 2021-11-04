@@ -37,14 +37,17 @@
                         <form method="post">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" name="username" id="username">
+                            <span id="alert-username" class="text-danger"></span>
+
                             <br>
                             <label for="password">Password</label>
                             <input type="text" class="form-control" name="password" id="password">
+                            <span id="alert-password" class="text-danger"></span>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Send Request</button>
+                        <button type="button" class="btn btn-primary" id="send-request">Send Request</button>
                     </div>
                 </div>
             </div>
@@ -52,4 +55,37 @@
 
     </div>
 </body>
+
+<script>
+    $("documemt").ready(function(){
+        $("#send-request").click(function(){
+            var username = $("#username").val()
+            var password = $("#password").val()
+            
+            if(username == ''){
+                $("#username").css('border', '1px solid red')
+                $("#alert-username").html("this field is required...")
+            }else{
+                $("#username").css('border', '1px solid #71cdba')
+                $("#alert-username").html("")
+            }
+            
+            if(password == ''){
+                $("#password").css('border', 'apx solid red')
+                $("#alert-password").html("this field is required...")
+            }
+
+            if(password != ''){
+                if(password.length < 8){
+                    $("#alert-password").html("this field more than 8 characters...")
+                }else{
+                    $("#password").css('border', '1px solid #71cdba')
+                    $("#alert-password").html("")
+                }
+            }
+
+        })
+    })
+</script>
+
 </html>
