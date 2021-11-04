@@ -57,7 +57,7 @@
                 
             </tbody>
         </table>
-        <button class="btn btn-info" id="refresh">refresh</button>
+        <!-- <button class="btn btn-info" id="refresh">refresh</button> -->
     </div>
 </body>
 
@@ -65,27 +65,51 @@
     $("documemt").ready(function(){
 
         // first fetch data
-        // $.ajax({
-        //     url: 'fetch.php',
-        //     method: 'POST',
-        //     success: function(values){
-        //         $("#list-users").html(values)
-        //     }
+        $.ajax({
+            url: 'fetch.php',
+            method: 'POST',
+            success: function(values){
+                $("#list-users").html(values)
+            }
+        })
+
+        // $("#refresh").click(function(){
+        //     $.ajax({
+        //         url: 'fetch.php',
+        //         method: 'POST',
+        //         success: function(values){
+        //             $("#list-users").html(values)
+        //         }
+        //     })
         // })
 
-        $("#refresh").click(function(){
-            $.ajax({
-                url: 'fetch.php',
-                method: 'POST',
-                success: function(values){
-                    $("#list-users").html(values)
-                }
-            })
-        })
+        // Validation form
 
         $("#send-request").click(function(){
             var username = $("#username").val()
             var password = $("#password").val()
+
+            // Sending ajax request (insert user)
+
+            if(username != '' && password != '' && password.length >= 8){
+                $.ajax({
+                    url: 'insert.php',
+                    method: 'POST',
+                    data: {username:username , password:password},
+                    success: function(){
+                        // alert("Sending request...")
+
+                        // first fetch data
+                        $.ajax({
+                            url: 'fetch.php',
+                            method: 'POST',
+                            success: function(values){
+                                $("#list-users").html(values)
+                            }
+                        })
+                    }                    
+                })
+            }
             
             if(username == ''){
                 $("#username").css('border', '1px solid red')
