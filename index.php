@@ -15,7 +15,7 @@
     <div class="container">
         <br>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" id="open-modal" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Add new
         </button>
         <!-- Modal -->
@@ -27,7 +27,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="post">
+                        <form method="post" id="user-form">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" name="username" id="username">
                             <span id="alert-username" class="text-danger"></span>
@@ -65,6 +65,16 @@
 
 <script>
     $("documemt").ready(function(){
+        // Reset form 
+        $("#open-modal").click(function(){
+            $("#user-form")[0].reset()
+            $("#username").css('border', '1px solid #ced4da')
+            $("#password").css('border', '1px solid #ced4da')
+            $("#username").val("")
+            $("#password").val("") 
+            $("#alert-username").html("") 
+            $("#alert-password").html("")
+        })
 
         // first fetch data
         $.ajax({
