@@ -41,6 +41,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" id="send-request">Send Request</button>
+                        <button type="button" class="btn btn-primary" id="update" style="display: none;">Update</button>
                     </div>
                 </div>
             </div>
@@ -65,8 +66,12 @@
 
 <script>
     $("documemt").ready(function(){
-        // Reset form 
         $("#open-modal").click(function(){
+            // reset button
+            $("#update").hide()
+            $("#send-request").show()
+
+            // reset form
             $("#user-form")[0].reset()
             $("#username").css('border', '1px solid #ced4da')
             $("#password").css('border', '1px solid #ced4da')
@@ -163,6 +168,7 @@
 
         })
 
+        // Delete user
         $(document).on('click', '#delete-user', function(){            
             var id = $(this).val()
             $.ajax({
@@ -192,6 +198,25 @@
                             $("#list-users").html(values)
                         }
                     })
+                }
+            })
+        })
+
+        // Update user
+        $(document).on('click', '#edit-user', function(){
+            var id = $(this).val()
+            $.ajax({
+                url: 'fetchRow.php',
+                method: 'post',
+                data: {id:id},
+                success: function(values){
+                    var data = jQuery.parseJSON(values)                    
+                    $("#username").val(data.username)
+                    $("#password").val(data.password)
+                    // $("#update").css('display', 'block')                    
+                    // $("#send-request").css('display', 'none')
+                    $("#update").show()
+                    $("#send-request").hide()
                 }
             })
         })

@@ -19,7 +19,7 @@
             <?= $user['password']; ?>
         </td>
         <td>
-            <button class="btn btn-warning" id="edit-user" value=<?= $user['id']; ?> >
+            <button class="btn btn-warning" id="edit-user" value=<?= $user['id']; ?> data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Edit
             </button>
             <button class="btn btn-danger" id="delete-user" value=<?php echo $user['id']; ?> >
