@@ -23,11 +23,12 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add new user</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Add new user</h5>                        
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form method="post" id="user-form">
+                            <input type="hidden" id="user-id">
                             <label for="username">Username</label>
                             <input type="text" class="form-control" name="username" id="username">
                             <span id="alert-username" class="text-danger"></span>
@@ -67,21 +68,23 @@
 <script>
     $("documemt").ready(function(){
         $("#open-modal").click(function(){
-            // reset button
+        // reset button
             $("#update").hide()
             $("#send-request").show()
 
-            // reset form
+        // reset form
             $("#user-form")[0].reset()
             $("#username").css('border', '1px solid #ced4da')
             $("#password").css('border', '1px solid #ced4da')
             $("#username").val("")
             $("#password").val("") 
+            $("#user-id").val("") 
             $("#alert-username").html("") 
             $("#alert-password").html("")
+            $("#exampleModalLabel").html("Add new user")
         })
 
-        // first fetch data
+    // first fetch data
         $.ajax({
             url: 'fetch.php',
             method: 'POST',
@@ -100,13 +103,13 @@
         //     })
         // })
 
-        // Validation form
+    // Validation form
 
         $("#send-request").click(function(){
             var username = $("#username").val()
             var password = $("#password").val()
 
-            // Sending ajax request (insert user)
+        // Sending ajax request (insert user)
 
             if(username != '' && password != '' && password.length >= 8){
                 $.ajax({
@@ -114,7 +117,11 @@
                     method: 'POST',
                     data: {username:username , password:password},
                     success: function(){
-                        // swal("Good job!", "You clicked the button!", "success");
+                        // Swal.fire(
+                        //     'Good job!',
+                        //     'You clicked the button!',
+                        //     'success'
+                        // )
                         
                         const Toast = Swal.mixin({
                             toast: true,
@@ -168,7 +175,7 @@
 
         })
 
-        // Delete user
+    // Delete user
         $(document).on('click', '#delete-user', function(){            
             var id = $(this).val()
             $.ajax({
@@ -189,7 +196,7 @@
                     })
                     Toast.fire({
                         icon: 'success',
-                        title: 'Signed in successfully'
+                        title: 'Delete successfully'
                     })
                     $.ajax({
                         url: 'fetch.php',
@@ -202,23 +209,76 @@
             })
         })
 
-        // Update user
+    // Update user (send request)
         $(document).on('click', '#edit-user', function(){
-            var id = $(this).val()
+        // reset form
+            $("#user-form")[0].reset()
+            $("#username").css('border', '1px solid #ced4da')
+            $("#password").css('border', '1px solid #ced4da')
+            $("#alert-username").html("")
+            $("#alert-password").html("")                           
+            
+            var id = $(this).val()           
             $.ajax({
                 url: 'fetchRow.php',
                 method: 'post',
                 data: {id:id},
                 success: function(values){
-                    var data = jQuery.parseJSON(values)                    
+                    var data = jQuery.parseJSON(values) 
+                    $("#user-id").val(data.id)
                     $("#username").val(data.username)
                     $("#password").val(data.password)
+                    $("#exampleModalLabel").html("Update user : " + data.username)
                     // $("#update").css('display', 'block')                    
                     // $("#send-request").css('display', 'none')
                     $("#update").show()
-                    $("#send-request").hide()
+                    $("#send-request").hide()                
                 }
             })
+        })
+
+        $("#update").click(function(){
+            var id = $("#user-id").val()
+            var username = $("#username").val()
+            var password = $("#password").val()
+
+            $.ajax({
+                url: 'update.php',
+                method: 'post',
+                data: {id:id , username:username , password:password},
+                success: function(){
+                    // Swal.fire(
+                    //     'Good job!',
+                    //     'You clicked the button!',
+                    //     'success'
+                    // )
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Update successfully'
+                    })
+
+                    $.ajax({
+                        url: 'fetch.php',
+                        method: 'POST',
+                        success: function(values){
+                            $("#list-users").html(values)
+                        }
+                    })
+                }
+            })
+
         })
 
     })
