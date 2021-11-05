@@ -162,6 +162,40 @@
             }
 
         })
+
+        $(document).on('click', '#delete-user', function(){            
+            var id = $(this).val()
+            $.ajax({
+                url: 'delete.php',
+                method: 'post',
+                data: {id:id},
+                success: function(){
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Signed in successfully'
+                    })
+                    $.ajax({
+                        url: 'fetch.php',
+                        method: 'POST',
+                        success: function(values){
+                            $("#list-users").html(values)
+                        }
+                    })
+                }
+            })
+        })
+
     })
 </script>
 
